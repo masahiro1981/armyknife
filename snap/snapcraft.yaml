@@ -11,7 +11,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 #Appsスタンザの下に、Snapの外に公開される実行ファイルを記述していきます。
 apps:
   helloworldc:
-    command: bin/app
+    command: bin/helloworld
 
   flashcard: #1つ目の実行ファイル:Hello worldと表示するC++プログラム
     command: bin/execute.sh
