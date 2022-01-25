@@ -1,0 +1,44 @@
+name: armyknifesnap # you probably want to 'snapcraft register <name>'
+base: core20 # the base snap is the execution environment for this snap
+version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
+summary: example showing how to snap multiple binaries # 79 char long summary
+description: |
+  This is an example snapcraft.yaml showing how to package multiple binaries.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+#Appsスタンザの下に、Snapの外に公開される実行ファイルを記述していきます。
+apps:
+  helloworldc:
+    command: bin/app
+
+  flashcard: #1つ目の実行ファイル:Hello worldと表示するC++プログラム
+    command: bin/execute.sh
+
+#partsスタンザの下に、各Appsスタンザで定義されたSnap外に公開される実行ファイルを作成するパーツを記載します。
+parts: 
+  helloworldc: #HelloWorldのバイナリをcmakeプラグインを利用して作成します。
+    plugin: cmake
+    source: https://github.com/masahiro1981/helloworld.git
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=""
+
+
+
+
+  flashcards:  #2つ目の実行ファイルLernitの元になっているFlashcardsのバイナリを作成します。
+    plugin: go
+    source: https://github.com/knitzsche/flashcards
+    source-type: git     
+
+  cards:      #2つ目のSnapを実行するのに必要なテキストファイルをSnapパッケージ内に持ち込みます
+    plugin: dump
+    source: data 
+
+  launchers:  #を実行するためのランチャ(シェルスクリプト)をSnapパッケージ内に持ち込みます。
+    plugin: dump
+    source: script
+    organize: 
+      execute.sh: bin/
+
